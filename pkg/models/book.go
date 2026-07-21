@@ -3,7 +3,6 @@ package models
 import (
 	"github.com/jinzhu/gorm"
 	"github.com/thisispramod/go-bookstore/config"
-	"github.com/thisispramod/go-bookstore/pkg/models"
 )
 
 var db *gorm.DB
@@ -18,6 +17,28 @@ type Book struct {
 func init() {
 	config.Connect()
 	db = config.GetDB()
-
 	db.AutoMigrate(&Book{})
+}
+
+func (b *Book) CreateBook() *Book {
+	db.Create(b)
+	return b
+}
+
+func GetAllBooks() []Book {
+	var books []Book
+	db.Find(&books)
+	return books
+}
+
+func GetBookById(Id int64) (*Book, *gorm.DB) {
+	var getBook Book
+	db := db.Where("ID=?", Id).Find(&getBook)
+	return &getBook, db
+}
+
+func DeleteBook(ID int64) Book {
+	var book Book
+	db.Where("ID=?", ID).Delete(book)
+	return book
 }
