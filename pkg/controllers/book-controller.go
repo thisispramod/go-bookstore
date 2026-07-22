@@ -116,10 +116,11 @@ func UpdateBook(w http.ResponseWriter, r *http.Request) {
 	}
 
 	// Save updated book
-	db.Save(bookDetails)
+	db.Save(&bookDetails)
 
 	// Convert response to JSON
 	res, err := json.Marshal(bookDetails)
+
 	if err != nil {
 		http.Error(w, "Unable to marshal JSON", http.StatusInternalServerError)
 		return
